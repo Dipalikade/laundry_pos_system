@@ -246,7 +246,8 @@ class _ActionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 100,
-      padding: const EdgeInsets.symmetric(vertical: 16),
+      height: 130,
+      padding: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
           color:  const Color(0xFFE8EDFF),
         borderRadius: BorderRadius.circular(14),
