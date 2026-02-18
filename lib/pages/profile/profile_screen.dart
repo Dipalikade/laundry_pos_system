@@ -181,8 +181,8 @@ class ProfileBody extends StatelessWidget {
                         (route) => false,
                   );
                 },
-                icon: const Icon(Icons.logout),
-                label: const Text('Logout'),
+                icon: const Icon(Icons.logout,color: Colors.white,),
+                label: const Text('Logout',style: TextStyle(color: Colors.white),),
               ),
             ),
           ),
