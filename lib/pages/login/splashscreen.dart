@@ -1,26 +1,59 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:laundry_pos_system_app/pages/login/loginscreen.dart';
+import 'package:laundry_pos_system_app/providers/auth_provider.dart';
 import '../HomePage/homescreen_1.dart';
 
-class SplashScreen extends StatefulWidget {
+
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    _checkLoginStatus();
+  }
 
-    // Navigate to HomeScreen after 2 seconds
-    Timer(const Duration(seconds: 2), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const Homescreen1()),
-      );
-    });
+  Future<void> _checkLoginStatus() async {
+    // Wait for 2 seconds (splash screen display time)
+    await Future.delayed(const Duration(seconds: 2));
+
+    if (mounted) {
+      // Check authentication state from Riverpod
+      final authState = ref.read(authProvider);
+      
+      if (authState.isAuthenticated) {
+        // User is logged in, navigate to Home
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const Homescreen1()),
+        );
+      } else {
+        // Check if there are saved credentials
+        await ref.read(authProvider.notifier).checkSavedCredentials();
+        
+        // Check again after checking saved credentials
+        final updatedAuthState = ref.read(authProvider);
+        
+        if (updatedAuthState.isAuthenticated) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const Homescreen1()),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+          );
+        }
+      }
+    }
   }
 
   @override
