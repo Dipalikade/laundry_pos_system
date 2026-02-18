@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:laundry_pos_system_app/util/header.dart';
 
+import '../../order/order_body.dart';
+
 
 class OrderSuccessScreen extends StatefulWidget {
   final String customerName; // ✅ Store the value
@@ -156,6 +158,7 @@ class _OrderSuccessScreenState
                           ),
                         ),
                         onPressed: () {
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>OrdersBody()));
                         },
                         child: const Text(
                           "View Order List",

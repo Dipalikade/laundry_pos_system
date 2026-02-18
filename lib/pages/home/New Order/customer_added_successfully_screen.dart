@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:laundry_pos_system_app/util/header.dart';
 
+import 'new_order.dart';
+
 
 class CustomerAddedSuccessScreen extends StatelessWidget {
   const CustomerAddedSuccessScreen({super.key});
@@ -112,7 +114,9 @@ class CustomerAddedSuccessScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>CustomerListBody()));
+                        },
                         child: const Text(
                           "Back to Customers",
                           style: TextStyle(
