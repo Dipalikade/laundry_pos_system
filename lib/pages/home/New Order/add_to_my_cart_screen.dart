@@ -236,17 +236,22 @@ class _AddToMyCartScreenState extends State<AddToMyCartScreen> {
             /// ➕ ADD SERVICE BUTTON
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFB8C6EA),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Center(
-                  child: Text(
-                    "+  Add Service Item",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600),
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFB8C6EA),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      "+  Add Service Item",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600),
+                    ),
                   ),
                 ),
               ),
