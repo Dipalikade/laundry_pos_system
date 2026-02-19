@@ -257,25 +257,23 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
 
                 const SizedBox(height: 4),
 
-                Row(
-                  children: [
-                    const Icon(Icons.email,size: 15,color: Colors.grey),
-                    const SizedBox(width: 8,),
-                    Text(widget.customer.email ?? "",
-                        style: const TextStyle(fontSize: 12)),
-                  ],
-                ),
-
-                const SizedBox(height: 4),
-
-                Row(
-                  children: [
-                    const Icon(Icons.location_on,size: 15,color: Colors.grey),
-                    const SizedBox(width: 8,),
-                    Text(widget.customer.address ?? "",
-                        style: const TextStyle(fontSize: 12)),
-                  ],
-                )
+                if (widget.customer.address != null && widget.customer.address.isNotEmpty)
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.location_on,
+                        size: 14,
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          widget.customer.address,
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                      ),
+                    ],
+                  ),
 
               ],
             ),
