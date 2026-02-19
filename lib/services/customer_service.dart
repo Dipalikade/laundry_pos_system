@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
+import '../model/area_model.dart';
 import '../model/customer_model.dart';
+import '../model/emirates_model.dart';
 
 class CustomerService {
   final Dio dio;
@@ -10,19 +12,24 @@ class CustomerService {
   Future<String> createCustomer(Customer customer) async {
     try {
       final response = await dio.post(
-        "customers/create",
+        "/customers/create", // ✅ FIXED
         data: customer.toJson(),
       );
 
-      if (response.statusCode == 200 &&
-          response.data["success"] == true) {
-        return response.data["message"];
+      final data = response.data;
+
+      if (response.statusCode == 200 && data["success"] == true) {
+        return data["message"] ?? "Customer created";
       } else {
-        throw Exception(response.data["message"]);
+        throw Exception(data["message"] ?? "Failed to create customer");
       }
     } on DioException catch (e) {
-      throw Exception(
-          e.response?.data["message"] ?? "Something went wrong");
+      final message =
+          (e.response?.data is Map && e.response?.data["message"] != null)
+          ? e.response?.data["message"]
+          : "Something went wrong";
+
+      throw Exception(message);
     }
   }
 
@@ -34,27 +41,78 @@ class CustomerService {
   }) async {
     try {
       final response = await dio.get(
-        "customers/list",
-        queryParameters: {
-          "search": search,
-          "page": page,
-          "limit": limit,
-        },
+        "/customers/list", // ✅ FIXED
+        queryParameters: {"search": search, "page": page, "limit": limit},
       );
 
-      if (response.statusCode == 200 &&
-          response.data["success"] == true) {
+      final data = response.data;
 
-        final List data = response.data["data"];
-
-        return data.map((json) => Customer.fromJson(json)).toList();
+      if (response.statusCode == 200 && data["success"] == true) {
+        final List list = data["data"] ?? [];
+        return list.map((json) => Customer.fromJson(json)).toList();
       } else {
-        throw Exception(response.data["message"]);
+        throw Exception(data["message"] ?? "Failed to fetch customers");
       }
     } on DioException catch (e) {
-      throw Exception(
-        e.response?.data["message"] ?? "Failed to fetch customers",
+      final message =
+          (e.response?.data is Map && e.response?.data["message"] != null)
+          ? e.response?.data["message"]
+          : "Failed to fetch customers";
+
+      throw Exception(message);
+    }
+  }
+
+  // 🔹 Fetch Emirates
+  Future<List<EmiratesModel>> getEmirates() async {
+    try {
+      final response = await dio.get(
+        "/location_management/emirates/list",
+      ); // ✅ FIXED
+
+      final responseData = response.data;
+
+      if (response.statusCode == 200 && responseData["success"] == true) {
+        final List list = responseData["data"] ?? [];
+
+        return list.map((e) => EmiratesModel.fromJson(e)).toList();
+      } else {
+        throw Exception(responseData["message"] ?? "Failed to load emirates");
+      }
+    } on DioException catch (e) {
+      final message =
+          (e.response?.data is Map && e.response?.data["message"] != null)
+          ? e.response?.data["message"]
+          : "Failed to load emirates";
+
+      throw Exception(message);
+    }
+  }
+
+  // 🔹 Fetch Areas
+  Future<List<AreaModel>> getAreas({int page = 1, int limit = 10}) async {
+    try {
+      final response = await dio.get(
+        "/areas/list",
+        queryParameters: {"page": page, "limit": limit},
       );
+
+      final responseData = response.data;
+
+      if (response.statusCode == 200 && responseData["success"] == true) {
+        final List list = responseData["data"] ?? [];
+
+        return list.map((e) => AreaModel.fromJson(e)).toList();
+      } else {
+        throw Exception(responseData["message"] ?? "Failed to load areas");
+      }
+    } on DioException catch (e) {
+      final message =
+          (e.response?.data is Map && e.response?.data["message"] != null)
+          ? e.response?.data["message"]
+          : "Failed to load areas";
+
+      throw Exception(message);
     }
   }
 }
