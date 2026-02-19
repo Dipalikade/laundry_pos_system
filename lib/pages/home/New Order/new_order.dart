@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import 'package:laundry_pos_system_app/util/header.dart';
 import '../../../model/customer_model.dart';
+import '../../../services/customer_service.dart';
 import 'add_customer_screen.dart';
 import 'create_order_screen.dart';
 
@@ -14,38 +16,56 @@ class CustomerListBody extends StatefulWidget {
 class _CustomerListBodyState extends State<CustomerListBody> {
   String selectedTab = "All";
 
-  // ✅ Dummy Customer List (Now using Model)
-  final List<Customer> customers = [
-    Customer(
-      name: "John Doe",
-      type: "Individual",
-      phone: "9876543201",
-      address: "Marina Pinnacle, Dubai",
-      email:"john.doe@example.com"
-    ),
-    Customer(
-      name: "Sarah Khan",
-      type: "Corporate",
-      phone: "9876543210",
-      address: "Business Bay, Dubai",
-        email:"john.doe@example.com"
-    ),
-    Customer(
-      name: "Ahmed Ali",
-      type: "Individual",
-      phone: "9876543222",
-      address: "Downtown Dubai",
-        email:"john.doe@example.com"
-    ),
-  ];
+  List<Customer> customers = [];
+  bool isLoading = true;
+
+  late CustomerService customerService;
+
+  @override
+  void initState() {
+    super.initState();
+
+    customerService = CustomerService(
+      Dio(
+        BaseOptions(
+          baseUrl: "https://slfuatbackend.1on1screen.com/api/",
+          headers: {
+            "Accept": "application/json",
+          },
+        ),
+      ),
+    );
+
+    loadCustomers();
+  }
+
+  Future<void> loadCustomers() async {
+    try {
+      final response = await customerService.fetchCustomers();
+      setState(() {
+        customers = response;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    // ✅ Filter Logic
+    // ✅ FIXED FILTER (CASE-INSENSITIVE)
     final List<Customer> filteredCustomers = selectedTab == "All"
         ? customers
         : customers
-        .where((customer) => customer.type == selectedTab)
+        .where((customer) =>
+    customer.type.toLowerCase() ==
+        selectedTab.toLowerCase())
         .toList();
 
     return Scaffold(
@@ -58,7 +78,7 @@ class _CustomerListBodyState extends State<CustomerListBody> {
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  // 🔍 Search bar + Add button
+                  /// 🔍 Search + Add Button
                   Row(
                     children: [
                       Expanded(
@@ -83,14 +103,19 @@ class _CustomerListBodyState extends State<CustomerListBody> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: IconButton(
-                          onPressed: () {
-                            Navigator.push(
+                          onPressed: () async {
+                            await Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
                                 const AddNewCustomerScreen(),
                               ),
                             );
+
+                            setState(() {
+                              isLoading = true;
+                            });
+                            loadCustomers();
                           },
                           icon: const Icon(
                             Icons.person_add,
@@ -103,7 +128,7 @@ class _CustomerListBodyState extends State<CustomerListBody> {
 
                   const SizedBox(height: 12),
 
-                  // 🔘 Filter Tabs
+                  /// 🔘 Filter Tabs
                   Container(
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
@@ -122,9 +147,11 @@ class _CustomerListBodyState extends State<CustomerListBody> {
               ),
             ),
 
-            // ✅ Dynamic List
+            /// ✅ List Section
             Expanded(
-              child: Padding(
+              child: isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: ListView.builder(
                   itemCount: filteredCustomers.length,
@@ -179,7 +206,9 @@ class CustomerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isIndividual = customer.type == "Individual";
+    // ✅ FIXED ROLE CHECK (CASE-INSENSITIVE)
+    final bool isIndividual =
+        customer.type.toLowerCase() == "individual";
 
     return GestureDetector(
       onTap: () {
@@ -195,7 +224,7 @@ class CustomerCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: Color(0xFFF5F1FD),
+          color: const Color(0xFFF5F1FD),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
@@ -223,7 +252,7 @@ class CustomerCard extends StatelessWidget {
                           size: 14, color: Colors.grey),
                       const SizedBox(width: 6),
                       Text(
-                        customer.phone,
+                        customer.mobileNo,
                         style:
                         const TextStyle(fontSize: 12),
                       ),
@@ -255,13 +284,16 @@ class CustomerCard extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
+                    // ✅ ORANGE for Individual
+                    // ✅ GREEN for Corporate
                     color: isIndividual
-                        ? const Color(0xFFF6E2B8)
-                        : const Color(0xFFCCE8E2),
+                        ? const Color(0xFFF7E3BF) // Orange
+                        : const Color(0xFFC7E0DF), // Green
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    customer.type,
+                    customer.type[0].toUpperCase() +
+                        customer.type.substring(1),
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,

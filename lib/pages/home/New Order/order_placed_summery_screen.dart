@@ -131,7 +131,7 @@ class _OrderPlacedSummeryScreenState extends State<OrderPlacedSummeryScreen> {
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 4),
-                          Text(widget.customer.phone),
+                          Text(widget.customer.mobileNo),
                           const SizedBox(height: 4),
                           Text(
                             widget.customer.address,

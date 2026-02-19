@@ -146,7 +146,7 @@ class _TransactionHistoryScreenState
                                 children: [
                                   Icon(Icons.phone,size: 15,color: Colors.grey),
                                   SizedBox(width: 8,),
-                                  Text(widget.customer.phone,
+                                  Text(widget.customer.mobileNo,
                                       style: const TextStyle(fontSize: 12)),
                                 ],
                               ),

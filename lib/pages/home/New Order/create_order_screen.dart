@@ -250,7 +250,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                   children: [
                     const Icon(Icons.phone,size: 15,color: Colors.grey),
                     const SizedBox(width: 8,),
-                    Text(widget.customer.phone,
+                    Text(widget.customer.mobileNo,
                         style: const TextStyle(fontSize: 12)),
                   ],
                 ),

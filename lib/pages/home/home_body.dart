@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../util/header.dart';
+import 'New Order/add_customer_screen.dart';
 import 'Scan QR/Scan_qr_code.dart';
 import 'New Order/new_order.dart';
 
@@ -61,6 +62,7 @@ class HomeBody extends StatelessWidget {
                         child: _ActionCard(imagepath: 'assets/images/image 82.png', title: 'Scan QR')),
                     GestureDetector(
                       onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>AddNewCustomerScreen()));
                       },
                         child: _ActionCard(imagepath: 'assets/images/image 84.png', title: 'Add Customer')),
                   ],

@@ -220,9 +220,9 @@ class _AddToMyCartScreenState extends State<AddToMyCartScreen> {
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold)),
                             const SizedBox(height: 4),
-                            Text(widget.customer.phone),
+                            Text(widget.customer.mobileNo),
                             const SizedBox(height: 4),
-                            Text(widget.customer.address,
+                            Text(widget.customer.address ?? "",
                                 style: const TextStyle(fontSize: 12)),
                           ],
                         ),
