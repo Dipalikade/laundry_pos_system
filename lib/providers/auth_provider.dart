@@ -1,10 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:laundry_pos_system_app/model/user_model.dart';
 import '../services/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+  
 // Auth State Notifier
 class AuthState {
   final bool isLoading;
