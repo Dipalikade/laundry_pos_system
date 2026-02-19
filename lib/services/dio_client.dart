@@ -1,17 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:laundry_pos_system_app/services/apibaseurl.dart';
 import '../providers/auth_provider.dart';
 
 final dioProvider = Provider<Dio>((ref) {
-  final dio = Dio(
+final Dio dio = Dio(
     BaseOptions(
-      baseUrl: "https://slfuatbackend.1on1screen.com/api/",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-      },
-    ),
-  );
+      baseUrl: ApiConfig.baseUrl,
+    connectTimeout: const Duration(seconds: 30),
+    receiveTimeout: const Duration(seconds: 30),
+  ));
 
   // Attach token automatically
   dio.interceptors.add(

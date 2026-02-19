@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:laundry_pos_system_app/pages/home_dashboard.dart';
 import 'package:laundry_pos_system_app/pages/login/loginscreen.dart';
 import 'package:laundry_pos_system_app/providers/auth_provider.dart';
-import '../HomePage/homescreen_1.dart';
 
 
 class SplashScreen extends ConsumerStatefulWidget {

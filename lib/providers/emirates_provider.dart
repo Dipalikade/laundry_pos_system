@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../model/emirates_model.dart';
 import '../services/customer_service.dart';
@@ -9,8 +8,7 @@ final customerServiceProvider = Provider<CustomerService>((ref) {
   return CustomerService(dio);
 });
 
-final emiratesProvider =
-FutureProvider<List<EmiratesModel>>((ref) async {
+final emiratesProvider = FutureProvider<List<EmiratesModel>>((ref) async {
   final service = ref.read(customerServiceProvider);
   return service.getEmirates();
 });

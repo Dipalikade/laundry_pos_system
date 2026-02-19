@@ -11,8 +11,7 @@ final customerServiceProvider = Provider<CustomerService>((ref) {
 class CustomerNotifier extends StateNotifier<AsyncValue<String?>> {
   final CustomerService service;
 
-  CustomerNotifier(this.service)
-      : super(const AsyncData(null));
+  CustomerNotifier(this.service) : super(const AsyncData(null));
 
   Future<void> addCustomer(Customer customer) async {
     state = const AsyncLoading();
@@ -27,8 +26,7 @@ class CustomerNotifier extends StateNotifier<AsyncValue<String?>> {
 }
 
 final customerProvider =
-StateNotifierProvider<CustomerNotifier, AsyncValue<String?>>(
-        (ref) {
+    StateNotifierProvider<CustomerNotifier, AsyncValue<String?>>((ref) {
       final service = ref.read(customerServiceProvider);
       return CustomerNotifier(service);
     });
