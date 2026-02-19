@@ -220,6 +220,8 @@ class _AddToMyCartScreenState extends State<AddToMyCartScreen> {
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold)),
                             const SizedBox(height: 4),
+                            Text(widget.customer.type,style: TextStyle(fontSize: 12),),
+                            const SizedBox(height: 4),
                             Text(widget.customer.mobileNo),
                             const SizedBox(height: 4),
                             Text(widget.customer.address ?? "",
@@ -235,7 +237,7 @@ class _AddToMyCartScreenState extends State<AddToMyCartScreen> {
         
             /// ➕ ADD SERVICE BUTTON
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.only(left: 16,right: 16),
               child: GestureDetector(
                 onTap: (){
                   Navigator.pop(context);
@@ -346,30 +348,7 @@ class _AddToMyCartScreenState extends State<AddToMyCartScreen> {
                 },
               ),
             ),
-        
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Total Amount",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                  Text(
-                    "₹ ${getTotalAmount().toStringAsFixed(2)}",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-        
+
             const SizedBox(height: 10),
         
             SafeArea(
@@ -386,7 +365,7 @@ class _AddToMyCartScreenState extends State<AddToMyCartScreen> {
                     ),
                     child: const Center(
                       child: Text(
-                        "Add Discount",
+                        "Apply Discount",
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                         ),

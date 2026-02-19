@@ -71,253 +71,236 @@ class _OrderPlacedSummeryScreenState extends State<OrderPlacedSummeryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF3F3F3),
-      body: Column(
-        children: [
-          /// 🔵 TOP BLUE HEADER
-          Container(
-            height: 140,
-            padding: const EdgeInsets.only(top: 50, left: 16, right: 16),
-            decoration: const BoxDecoration(
-              color: Color(0xFF3F6CC9),
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
-            ),
-            child: const Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                "Create Order",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
+      body: SafeArea(
+        child: Column(
+          children: [
+            /// 🔵 TOP BLUE HEADER
+            Container(
+              height: 140,
+              padding: const EdgeInsets.only(top: 50, left: 16, right: 16),
+              decoration: const BoxDecoration(
+                color: Color(0xFF3F6CC9),
+                borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
+              ),
+              child: const Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Create Order",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
-          ),
-
-          /// 🧾 CUSTOMER CARD
-          Transform.translate(
-            offset: const Offset(0, -40),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 10,
-                      color: Colors.black.withOpacity(0.1),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 28,
-                      backgroundColor: Colors.grey.shade200,
-                      child: Text(
-                        widget.customer.name[0],
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+        
+            /// 🧾 CUSTOMER CARD
+            Transform.translate(
+              offset: const Offset(0, -40),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 10,
+                        color: Colors.black.withOpacity(0.1),
                       ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.customer.name,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(widget.customer.mobileNo),
-                          const SizedBox(height: 4),
-                          Text(
-                            widget.customer.address,
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-          /// 🛒 CART LIST
-          Expanded(
-            child: localCart.isEmpty
-                ? const Center(child: Text("No items in cart"))
-                : ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: localCart.length,
-                    itemBuilder: (context, index) {
-                      final item = localCart[index];
-
-                      return Container(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFDDE2F4),
-                          borderRadius: BorderRadius.circular(14),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 28,
+                        backgroundColor: Colors.grey.shade200,
+                        child: Text(
+                          widget.customer.name[0],
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        child: Row(
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                            Text(
+                              widget.customer.name,
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(widget.customer.type),
+                            const SizedBox(height: 4),
+                            Text(widget.customer.mobileNo),
+                            const SizedBox(height: 4),
+                            Text(
+                              widget.customer.address,
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+        
+            /// 🛒 CART LIST
+            Expanded(
+              child: localCart.isEmpty
+                  ? const Center(child: Text("No items in cart"))
+                  : ListView.builder(
+                      padding: const EdgeInsets.only(left: 16,right: 16),
+                      itemCount: localCart.length,
+                      itemBuilder: (context, index) {
+                        final item = localCart[index];
+        
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 12),
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFDDE2F4),
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      item.title,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      item.serviceType,
+                                      style: const TextStyle(color: Colors.blue),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Text(
+                                      "₹ ${item.price}",
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Row(
                                 children: [
-                                  Text(
-                                    item.title,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                  _qtyButton(
+                                    icon: Icons.remove,
+                                    onTap: () => decreaseQty(index),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                    ),
+                                    child: Text(
+                                      item.quantity.toString(),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    item.serviceType,
-                                    style: const TextStyle(color: Colors.blue),
+                                  _qtyButton(
+                                    icon: Icons.add,
+                                    onTap: () => increaseQty(index),
                                   ),
-                                  const SizedBox(height: 6),
-                                  Text(
-                                    "₹ ${item.price}",
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
+                                  const SizedBox(width: 10),
+                                  GestureDetector(
+                                    onTap: () => deleteItem(index),
+                                    child: const Icon(
+                                      Icons.delete_outline,
+                                      color: Colors.red,
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                            Row(
-                              children: [
-                                _qtyButton(
-                                  icon: Icons.remove,
-                                  onTap: () => decreaseQty(index),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                  ),
-                                  child: Text(
-                                    item.quantity.toString(),
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                _qtyButton(
-                                  icon: Icons.add,
-                                  onTap: () => increaseQty(index),
-                                ),
-                                const SizedBox(width: 10),
-                                GestureDetector(
-                                  onTap: () => deleteItem(index),
-                                  child: const Icon(
-                                    Icons.delete_outline,
-                                    color: Colors.red,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-          ),
-
-          /// TOTAL AMOUNT
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  "Total Amount",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                Text(
-                  "₹ ${getTotalAmount().toStringAsFixed(2)}",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 20),
-          _buildSummary(),
-          const SizedBox(height: 16),
-
-          /// BUTTONS
-          /// BOTTOM BUTTONS
-          Padding(
-            padding: EdgeInsetsGeometry.only(bottom: 30),
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: const BoxDecoration(color: Colors.white),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        side: const BorderSide(color: Color(0xFFCDD2E1)),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Text(
-                        "Cancel",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Place order logic
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => OrderSuccessScreen(
-                              customerName: widget.customer.name,
-                            ),
+                            ],
                           ),
                         );
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF4845D2),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                    ),
+            ),
+
+            const SizedBox(height: 20),
+            _buildSummary(),
+            const SizedBox(height: 16),
+        
+            /// BUTTONS
+            /// BOTTOM BUTTONS
+            Padding(
+              padding: EdgeInsetsGeometry.only(bottom: 30),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: const BoxDecoration(color: Colors.white),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          side: const BorderSide(color: Color(0xFFCDD2E1)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                         ),
-                      ),
-                      child: const Text(
-                        "Place Order",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
+                        child: const Text(
+                          "Cancel",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Place order logic
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => OrderSuccessScreen(
+                                customerName: widget.customer.name,
+                              ),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF4845D2),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: const Text(
+                          "Place Order",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
