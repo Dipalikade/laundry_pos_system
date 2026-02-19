@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:laundry_pos_system_app/model/user_model.dart';
 import '../services/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-  
+
 // Auth State Notifier
 class AuthState {
   final bool isLoading;
@@ -85,12 +85,27 @@ Future<void> login(String email, String password, bool rememberMe) async {
     }
   }
 
-  void logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
-    await prefs.remove('user');
-    
-    state = AuthState();
+  Future<void> logout() async {
+    try {
+      state = state.copyWith(isLoading: true);
+
+      final token = state.token;
+
+      if (token != null) {
+        await _authService.logout(token);
+      }
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('token');
+      await prefs.remove('user');
+
+      state = AuthState(); // Reset state
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: e.toString().replaceAll('Exception: ', ''),
+      );
+    }
   }
 }
 

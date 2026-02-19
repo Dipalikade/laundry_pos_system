@@ -37,4 +37,20 @@ class AuthService {
       throw Exception('An unexpected error occurred');
     }
   }
+
+ Future<void> logout(String token) async {
+   try {
+     await _dio.post(
+       '/auth/logout',
+       options: Options(
+         headers: {
+           'Authorization': 'Bearer $token',
+         },
+       ),
+     );
+   } on DioException catch (e) {
+     throw Exception(
+         e.response?.data['message'] ?? 'Logout failed');
+   }
+ }
 }

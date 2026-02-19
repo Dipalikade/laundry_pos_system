@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../providers/auth_provider.dart';
 import '../login/loginscreen.dart';
 
-class ProfileBody extends StatelessWidget {
+class ProfileBody extends ConsumerWidget {
   const ProfileBody({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref) {
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -174,7 +176,9 @@ class ProfileBody extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                onPressed: () {
+                onPressed: () async {
+                  await ref.read(authProvider.notifier).logout();
+
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => LoginScreen()),
