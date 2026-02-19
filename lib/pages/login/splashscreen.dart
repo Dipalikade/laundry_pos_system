@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:laundry_pos_system_app/pages/home_dashboard.dart';
 import 'package:laundry_pos_system_app/pages/login/loginscreen.dart';
 import 'package:laundry_pos_system_app/providers/auth_provider.dart';
 import '../HomePage/homescreen_1.dart';
@@ -32,7 +33,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
         // User is logged in, navigate to Home
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const Homescreen1()),
+          MaterialPageRoute(builder: (context) => const HomeDashboardScreen()),
         );
       } else {
         // Check if there are saved credentials
@@ -44,7 +45,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
         if (updatedAuthState.isAuthenticated) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const Homescreen1()),
+            MaterialPageRoute(builder: (context) => const HomeDashboardScreen()),
           );
         } else {
           Navigator.pushReplacement(

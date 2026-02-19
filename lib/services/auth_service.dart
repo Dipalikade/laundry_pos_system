@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:laundry_pos_system_app/model/user_model.dart';
+import 'package:laundry_pos_system_app/services/apibaseurl.dart';
 
 class AuthService {
-  final Dio _dio = Dio(BaseOptions(
-    baseUrl: 'https://slfuatbackend.1on1screen.com/api',
+ final Dio _dio = Dio(
+    BaseOptions(
+      baseUrl: ApiConfig.baseUrl,
     connectTimeout: const Duration(seconds: 30),
     receiveTimeout: const Duration(seconds: 30),
   ));
