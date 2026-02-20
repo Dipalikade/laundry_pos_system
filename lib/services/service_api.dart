@@ -7,15 +7,18 @@ class ServiceApi {
   final Dio _dio;
   static const String baseUrl = 'https://slfuatbackend.1on1screen.com';
 
-  ServiceApi() : _dio = Dio(BaseOptions(
-    baseUrl: baseUrl,
-    connectTimeout: const Duration(seconds: 30),
-    receiveTimeout: const Duration(seconds: 30),
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
-  )) {
+  ServiceApi()
+    : _dio = Dio(
+        BaseOptions(
+          baseUrl: baseUrl,
+          connectTimeout: const Duration(seconds: 30),
+          receiveTimeout: const Duration(seconds: 30),
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+        ),
+      ) {
     // Add interceptor for auth token
     _dio.interceptors.add(
       InterceptorsWrapper(
@@ -49,16 +52,13 @@ class ServiceApi {
     String? category,
   }) async {
     try {
-      final queryParams = <String, dynamic>{
-        'page': page,
-        'limit': limit,
-      };
-      
+      final queryParams = <String, dynamic>{'page': page, 'limit': limit};
+
       // Only add search if it's not null and not empty
       if (search != null && search.isNotEmpty) {
         queryParams['search'] = search;
       }
-      
+
       // Add category if selected and not 'All'
       if (category != null && category.isNotEmpty && category != 'All') {
         queryParams['category'] = category;
@@ -80,7 +80,9 @@ class ServiceApi {
       print('Dio Error: ${e.message}');
       print('Response Data: ${e.response?.data}');
       if (e.response != null) {
-        throw Exception(e.response?.data['message'] ?? 'Failed to load services');
+        throw Exception(
+          e.response?.data['message'] ?? 'Failed to load services',
+        );
       } else {
         throw Exception('Network error. Please check your connection.');
       }
@@ -94,7 +96,7 @@ class ServiceApi {
   Future<CategoryListResponse> getServiceCategories() async {
     try {
       print('Calling API: /api/service/service_categories/list');
-      
+
       final response = await _dio.get('/api/service/service_categories/list');
 
       if (response.statusCode == 200) {
@@ -106,7 +108,9 @@ class ServiceApi {
     } on DioException catch (e) {
       print('Categories Error: ${e.message}');
       if (e.response != null) {
-        throw Exception(e.response?.data['message'] ?? 'Failed to load categories');
+        throw Exception(
+          e.response?.data['message'] ?? 'Failed to load categories',
+        );
       } else {
         throw Exception('Network error. Please check your connection.');
       }
@@ -126,18 +130,32 @@ class ServiceApi {
   String getImageUrl(String? path) {
     if (path == null || path.isEmpty) return '';
     if (path.startsWith('http')) return path;
-    
+
     // Remove any duplicate 'uploads' in the path
     String cleanPath = path.replaceFirst('uploads/', '');
     return '$baseUrl/uploads/$cleanPath';
   }
 
   // Get service icon URL
+  // Get service icon URL with multiple fallback paths
   String getServiceIconUrl(String iconName) {
     if (iconName.isEmpty) return '';
-    
-    // Handle different icon name formats
-    String cleanIcon = iconName.replaceFirst('uploads/', '');
+
+    // List of possible paths to try (in order of likelihood)
+    final possiblePaths = [
+      '/uploads/', // Current path that's failing
+      '/images/',
+      '/assets/',
+      '/storage/',
+      '/public/uploads/',
+      '/upload/',
+      '/media/',
+    ];
+
+    // Clean the filename
+    String cleanIcon = iconName.replaceAll('uploads/', '');
+
+    // Return the first path for now - we'll let the Image widget handle fallbacks
     return '$baseUrl/uploads/$cleanIcon';
   }
 }
