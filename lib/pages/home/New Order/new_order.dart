@@ -29,9 +29,7 @@ class _CustomerListBodyState extends State<CustomerListBody> {
       Dio(
         BaseOptions(
           baseUrl: "https://slfuatbackend.1on1screen.com/api/",
-          headers: {
-            "Accept": "application/json",
-          },
+          headers: {"Accept": "application/json"},
         ),
       ),
     );
@@ -51,9 +49,9 @@ class _CustomerListBodyState extends State<CustomerListBody> {
         isLoading = false;
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
     }
   }
 
@@ -63,10 +61,11 @@ class _CustomerListBodyState extends State<CustomerListBody> {
     final List<Customer> filteredCustomers = selectedTab == "All"
         ? customers
         : customers
-        .where((customer) =>
-    customer.type.toLowerCase() ==
-        selectedTab.toLowerCase())
-        .toList();
+              .where(
+                (customer) =>
+                    customer.type.toLowerCase() == selectedTab.toLowerCase(),
+              )
+              .toList();
 
     return Scaffold(
       body: SafeArea(
@@ -86,8 +85,9 @@ class _CustomerListBodyState extends State<CustomerListBody> {
                           decoration: InputDecoration(
                             hintText: "Search Customer Here",
                             prefixIcon: const Icon(Icons.search),
-                            contentPadding:
-                            const EdgeInsets.symmetric(vertical: 12),
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 12,
+                            ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -108,7 +108,7 @@ class _CustomerListBodyState extends State<CustomerListBody> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                const AddNewCustomerScreen(),
+                                    const AddNewCustomerScreen(),
                               ),
                             );
 
@@ -122,7 +122,7 @@ class _CustomerListBodyState extends State<CustomerListBody> {
                             color: Colors.white,
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
 
@@ -152,16 +152,16 @@ class _CustomerListBodyState extends State<CustomerListBody> {
               child: isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: ListView.builder(
-                  itemCount: filteredCustomers.length,
-                  itemBuilder: (context, index) {
-                    return CustomerCard(
-                      customer: filteredCustomers[index],
-                    );
-                  },
-                ),
-              ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: ListView.builder(
+                        itemCount: filteredCustomers.length,
+                        itemBuilder: (context, index) {
+                          return CustomerCard(
+                            customer: filteredCustomers[index],
+                          );
+                        },
+                      ),
+                    ),
             ),
           ],
         ),
@@ -207,16 +207,14 @@ class CustomerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // ✅ FIXED ROLE CHECK (CASE-INSENSITIVE)
-    final bool isIndividual =
-        customer.type.toLowerCase() == "individual";
+    final bool isIndividual = customer.type.toLowerCase() == "individual";
 
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                CreateOrderScreen(customer: customer),
+            builder: (context) => CreateOrderScreen(customer: customer),
           ),
         );
       },
@@ -235,44 +233,45 @@ class CustomerCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      const Icon(Icons.person,
-                          size: 16, color: Colors.grey),
+                      const Icon(Icons.person, size: 16, color: Colors.grey),
                       const SizedBox(width: 6),
                       Text(
                         customer.name,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w600),
+                        style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),
                   const SizedBox(height: 6),
                   Row(
                     children: [
-                      const Icon(Icons.phone,
-                          size: 14, color: Colors.grey),
+                      const Icon(Icons.phone, size: 14, color: Colors.grey),
                       const SizedBox(width: 6),
                       Text(
                         customer.mobileNo,
-                        style:
-                        const TextStyle(fontSize: 12),
+                        style: const TextStyle(fontSize: 12),
                       ),
                     ],
                   ),
                   const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      const Icon(Icons.location_on,
-                          size: 14, color: Colors.grey),
-                      const SizedBox(width: 6),
-                      Expanded(
-                        child: Text(
-                          customer.address,
-                          style:
-                          const TextStyle(fontSize: 12),
+
+
+                  if (customer.address != null && customer.address.isNotEmpty)
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.location_on,
+                          size: 14,
+                          color: Colors.grey,
                         ),
-                      ),
-                    ],
-                  ),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: Text(
+                            customer.address,
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ),
@@ -282,7 +281,9 @@ class CustomerCard extends StatelessWidget {
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 6),
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     // ✅ ORANGE for Individual
                     // ✅ GREEN for Corporate
@@ -292,8 +293,7 @@ class CustomerCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    customer.type[0].toUpperCase() +
-                        customer.type.substring(1),
+                    customer.type[0].toUpperCase() + customer.type.substring(1),
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,

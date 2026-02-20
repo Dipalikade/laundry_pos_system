@@ -8,7 +8,6 @@ class headerUi extends StatefulWidget {
   @override
   State<headerUi> createState() => _headerUiState();
 
-  // this is dipali code
 }
 
 class _headerUiState extends State<headerUi> {
