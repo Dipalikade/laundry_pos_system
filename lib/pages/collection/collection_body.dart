@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:laundry_pos_system_app/pages/collection/select_payment_method.dart';
 import 'package:laundry_pos_system_app/util/header.dart';
+import '../../providers/collection_provider.dart';
 import 'add_collection.dart';
 
 enum CollectionStatus {
@@ -8,75 +10,97 @@ enum CollectionStatus {
   cancelled,
 }
 
-class TodaysCollectionsScreen extends StatelessWidget {
+class TodaysCollectionsScreen extends ConsumerWidget {
   const TodaysCollectionsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F6FF),
       body: Column(
         children: [
-          // 🔵 Header
-          headerUi(
-            title: "Today’s Collections",
-          ),
+          headerUi(title: "Today’s Collections"),
 
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                // 🔍 Search + Filter
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: "Search Collection",
-                          prefixIcon: const Icon(Icons.search, size: 20),
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide.none,
+          Expanded(   // 👈 THIS WAS MISSING
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  // 🔍 Search Row
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: "Search Collection",
+                            prefixIcon: const Icon(Icons.search, size: 20),
+                            filled: true,
+                            fillColor: Colors.white,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide.none,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 10),
-                    Container(
-                      height: 48,
-                      width: 48,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF6F8EEA),
-                        borderRadius: BorderRadius.circular(10),
+                      const SizedBox(width: 10),
+                      Container(
+                        height: 48,
+                        width: 48,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF6F8EEA),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AddCollectionScreen(),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.add_box_outlined),
+                        ),
                       ),
-                      child: IconButton(onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>AddCollectionScreen()));
-                      }, icon: Icon(Icons.add_box_outlined))
+                    ],
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // 📦 API List
+                  Expanded(
+                    child: ref.watch(collectionsProvider).when(
+                      data: (collections) {
+                        if (collections.isEmpty) {
+                          return const Center(
+                              child: Text("No Collections Found"));
+                        }
+
+                        return ListView.builder(
+                          itemCount: collections.length,
+                          itemBuilder: (context, index) {
+                            final item = collections[index];
+
+                            return CollectionCard(
+                              id: item.collectionCode,
+                              type: item.collectionType,
+                              date:
+                              "${item.pickupDate.day}/${item.pickupDate.month}/${item.pickupDate.year}",
+                              time: item.timeSlot,
+                              address: item.phoneNumber,
+                            );
+                          },
+                        );
+                      },
+                      loading: () =>
+                      const Center(child: CircularProgressIndicator()),
+                      error: (err, _) =>
+                          Center(child: Text(err.toString())),
                     ),
-                  ],
-                ),
-
-                const SizedBox(height: 16),
-
-                // 📦 Collection Cards
-                const CollectionCard(
-                  id: "#TMS/COL-01",
-                  type: "Cloth",
-                  date: "25/12/2025",
-                  time: "9 AM to 10 AM",
-                  address: "Dubai",
-                ),
-
-                const CollectionCard(
-                  id: "#TMS/COL-02",
-                  type: "Payment",
-                  date: "25/12/2025",
-                  time: "11 AM to 12 PM",
-                  address: "Dubai",
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],

@@ -1,59 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:laundry_pos_system_app/util/header.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../util/header.dart';
 import '../../model/order_model.dart';
+import '../../providers/order_provider.dart';
 import 'order_detailed_page.dart';
+import 'package:intl/intl.dart';
 
-class OrdersBody extends StatelessWidget {
+class OrdersBody extends ConsumerWidget {
   const OrdersBody({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ordersAsync = ref.watch(ordersProvider);
+
     return Scaffold(
       backgroundColor: const Color(0xFFF5F6FF),
       body: SafeArea(
         child: Column(
           children: [
-            /// 🔵 Header
             headerUi(title: 'Order List'),
 
-            /// 🔍 Search Bar
             Padding(
               padding: const EdgeInsets.all(16),
               child: _searchBar(),
             ),
 
-            /// 📋 Order List
             Expanded(
-              child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                children: [
-                  OrderCard(
-                    order: OrderModel(
-                      orderId: "TMS/ORD-01",
-                      customerName: "John Doe",
-                      phone: "9876543201",
-                      address: "Marina Pinnacle, Dubai",
-                      status: "Pending",
-                      total: 6.93,
-                      date: "Dec 17, 2025, 09:42 AM",
-                      subtotal: 7.00,
-                      discount: 0.07,
-                    ),
-                  ),
-                  OrderCard(
-                    order: OrderModel(
-                      orderId: "TMS/ORD-02",
-                      customerName: "Jane Smith",
-                      phone: "9876543210",
-                      address: "Emirates Towers, Dubai",
-                      status: "Delivered",
-                      total: 12.50,
-                      date: "Dec 18, 2025, 11:30 AM",
-                      subtotal: 7.00,
-                      discount: 0.07,
-                    ),
-                  ),
-                ],
+              child: ordersAsync.when(
+                loading: () =>
+                const Center(child: CircularProgressIndicator()),
+                error: (e, _) =>
+                    Center(child: Text("Error: ${e.toString()}")),
+                data: (orders) {
+                  if (orders.isEmpty) {
+                    return const Center(
+                      child: Text("No Orders Found"),
+                    );
+                  }
+
+                  return ListView.builder(
+                    padding:
+                    const EdgeInsets.symmetric(horizontal: 16),
+                    itemCount: orders.length,
+                    itemBuilder: (context, index) {
+                      return OrderCard(order: orders[index]);
+                    },
+                  );
+                },
               ),
             ),
           ],
@@ -62,7 +55,6 @@ class OrdersBody extends StatelessWidget {
     );
   }
 
-  /// 🔍 Search Bar Widget
   Widget _searchBar() {
     return TextField(
       decoration: InputDecoration(
@@ -71,14 +63,8 @@ class OrdersBody extends StatelessWidget {
         suffixIcon: const Icon(Icons.tune),
         filled: true,
         fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(vertical: 0),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Colors.grey),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Color(0xffE0E0E0)),
         ),
       ),
     );
@@ -108,7 +94,10 @@ class OrderCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 14),
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: const Color(0xFFE8EDFF),
+            color: Color(0xFFF5F1FD),
+          // color: order.orderStatus == "Order Received"
+          //     ? const Color(0xFFFFE3C6)
+          //     : const Color(0xFFDFF1EC),
           borderRadius: BorderRadius.circular(14),
         ),
         child: Row(
@@ -121,9 +110,14 @@ class OrderCard extends StatelessWidget {
                 children: [
                   _infoRow(Icons.person, order.customerName),
                   const SizedBox(height: 6),
-                  _infoRow(Icons.phone, order.phone, small: true),
+                  _infoRow(Icons.local_shipping, order.driverName, small: true),
                   const SizedBox(height: 6),
-                  _infoRow(Icons.location_on, order.address, small: true),
+                  _infoRow(
+                    Icons.calendar_today,
+                    DateFormat('dd-MM-yyyy')
+                        .format(DateTime.parse(order.orderDate)),
+                    small: true,
+                  ),
                 ],
               ),
             ),
@@ -136,17 +130,17 @@ class OrderCard extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: order.status == "Pending"
-                        ? const Color(0xFFFFE3C6)
+                    color: order.orderStatus == "Deleted"
+                        ? Colors.red.shade200
                         : const Color(0xFFDFF1EC),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
-                    order.status,
+                    order.orderStatus,
                     style: TextStyle(
                       fontSize: 11,
-                      color: order.status == "Pending"
-                          ? const Color(0xFFB26A00)
+                      color: order.orderStatus == "Deleted"
+                          ? Colors.red
                           : const Color(0xFF2E7D6B),
                       fontWeight: FontWeight.w600,
                     ),
@@ -154,7 +148,7 @@ class OrderCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'AED ${order.total.toStringAsFixed(2)}',
+                  'AED ${order.grossTotal.toStringAsFixed(2)}',
                   style: const TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.bold,

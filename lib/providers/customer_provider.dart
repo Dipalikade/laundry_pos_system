@@ -30,3 +30,9 @@ final customerProvider =
       final service = ref.read(customerServiceProvider);
       return CustomerNotifier(service);
     });
+
+final customersListProvider =
+FutureProvider.family<List<Customer>, String>((ref, search) async {
+  final service = ref.read(customerServiceProvider);
+  return service.fetchCustomers(search: search, limit: 1000);
+});

@@ -37,7 +37,7 @@ class CustomerService {
   Future<List<Customer>> fetchCustomers({
     String search = "",
     int page = 1,
-    int limit = 10,
+    int limit = 1000,
   }) async {
     try {
       final response = await dio.get(
