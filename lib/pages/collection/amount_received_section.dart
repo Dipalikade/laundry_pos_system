@@ -2,9 +2,31 @@ import 'package:flutter/material.dart';
 import '../../util/header.dart';
 import 'collection_qr_payment_screen.dart';
 
-class AmountReceivedSection extends StatelessWidget {
-  const AmountReceivedSection({super.key});
+class AmountReceivedSection extends StatefulWidget {
+  final int realId;
+  final String displayId;
+  final String type;
+  final String date;
+  final String time;
+  final String address;
+  final String PhoneNumber;
 
+  const AmountReceivedSection({
+    super.key,
+    required this.displayId,
+    required this.type,
+    required this.date,
+    required this.time,
+    required this.address,
+    required this.realId,
+    required this.PhoneNumber
+  });
+
+  @override
+  State<AmountReceivedSection> createState() => _AmountReceivedSectionState();
+}
+
+class _AmountReceivedSectionState extends State<AmountReceivedSection> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,7 +35,6 @@ class AmountReceivedSection extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-
             /// 🔵 HEADER
             headerUi(title: "Today's Collections"),
 
@@ -24,7 +45,6 @@ class AmountReceivedSection extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
-
                     /// ===============================
                     /// 📄 COLLECTION INFO CARD
                     /// ===============================
@@ -37,22 +57,22 @@ class AmountReceivedSection extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-
                           /// LEFT DETAILS
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                "#TMS/COL-01",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            children: [
+                              Text(widget.displayId,
+                                style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               SizedBox(height: 8),
 
                               Row(
                                 children: [
-                                  Icon(Icons.person, size: 16, color: Colors.grey),
+                                  Icon(
+                                    Icons.person,
+                                    size: 16,
+                                    color: Colors.grey,
+                                  ),
                                   SizedBox(width: 6),
                                   Text("John Doe"),
                                 ],
@@ -62,10 +82,15 @@ class AmountReceivedSection extends StatelessWidget {
 
                               Row(
                                 children: [
-                                  Icon(Icons.phone, size: 16, color: Colors.grey),
+                                  Icon(
+                                    Icons.phone,
+                                    size: 16,
+                                    color: Colors.grey,
+                                  ),
                                   SizedBox(width: 6),
-                                  Text("9876543201",
-                                      style: TextStyle(color: Colors.grey)),
+                                  Text(widget.PhoneNumber,
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
                                 ],
                               ),
 
@@ -73,11 +98,15 @@ class AmountReceivedSection extends StatelessWidget {
 
                               Row(
                                 children: [
-                                  Icon(Icons.payment,
-                                      size: 16, color: Colors.grey),
+                                  Icon(
+                                    Icons.payment,
+                                    size: 16,
+                                    color: Colors.grey,
+                                  ),
                                   SizedBox(width: 6),
-                                  Text("Payment",
-                                      style: TextStyle(color: Colors.grey)),
+                                  Text(widget.type,
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
                                 ],
                               ),
                             ],
@@ -130,7 +159,6 @@ class AmountReceivedSection extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-
                           const Text(
                             "Amount Received",
                             style: TextStyle(
@@ -150,10 +178,11 @@ class AmountReceivedSection extends StatelessWidget {
                             ),
                             child: Row(
                               children: [
-
                                 /// AED BOX
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 14,
+                                  ),
                                   decoration: const BoxDecoration(
                                     color: Color(0xFFF2F2F2),
                                     borderRadius: BorderRadius.only(
@@ -192,8 +221,9 @@ class AmountReceivedSection extends StatelessWidget {
                           RichText(
                             text: const TextSpan(
                               style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.black54),
+                                fontSize: 13,
+                                color: Colors.black54,
+                              ),
                               children: [
                                 TextSpan(text: "Total Payable :  "),
                                 TextSpan(
@@ -218,8 +248,7 @@ class AmountReceivedSection extends StatelessWidget {
             /// 🟢 CONTINUE BUTTON
             /// ===============================
             Padding(
-              padding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -231,14 +260,24 @@ class AmountReceivedSection extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>CollectionPaymentScreen()));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CollectionPaymentScreen(
+                          realId: widget.realId,
+                          displayId: widget.displayId,
+                          type: widget.type,
+                          date: widget.date,
+                          time: widget.time,
+                          address: widget.address,
+                          PhoneNumber : widget.PhoneNumber
+                        ),
+                      ),
+                    );
                   },
                   child: const Text(
                     "Continue",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
                   ),
                 ),
               ),

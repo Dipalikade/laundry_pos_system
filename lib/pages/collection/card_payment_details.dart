@@ -2,9 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:laundry_pos_system_app/pages/collection/select_payment_method_upper_part_util.dart';
 
 import 'amount_received_section.dart';
-class CardPaymentDetailsForm extends StatelessWidget {
-  const CardPaymentDetailsForm({super.key});
 
+class CardPaymentDetailsForm extends StatefulWidget {
+  final int realId;
+  final String displayId;
+  final String type;
+  final String date;
+  final String time;
+  final String address;
+  final String PhoneNumber;
+  const CardPaymentDetailsForm({
+    super.key,
+    required this.PhoneNumber,
+    required this.address,
+    required this.time,
+    required this.date,
+    required this.type,
+    required this.displayId,
+    required this.realId,
+  });
+
+  @override
+  State<CardPaymentDetailsForm> createState() => _CardPaymentDetailsFormState();
+}
+
+class _CardPaymentDetailsFormState extends State<CardPaymentDetailsForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,7 +34,15 @@ class CardPaymentDetailsForm extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const SelectPaymentMethodUpperPartUtil(),
+              SelectPaymentMethodUpperPartUtil(
+                realId: widget.realId,
+                displayId: widget.displayId,
+                type: widget.type,
+                date: widget.date,
+                time: widget.time,
+                address: widget.address,
+                PhoneNumber: widget.PhoneNumber,
+              ),
 
               const SizedBox(height: 20),
 
@@ -27,7 +57,6 @@ class CardPaymentDetailsForm extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       const Text(
                         "Amount Received",
                         style: TextStyle(
@@ -70,7 +99,20 @@ class CardPaymentDetailsForm extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>AmountReceivedSection()));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AmountReceivedSection(
+                            realId: widget.realId,
+                            displayId: widget.displayId,
+                            type: widget.type,
+                            date: widget.date,
+                            time: widget.time,
+                            address: widget.address,
+                            PhoneNumber: widget.PhoneNumber
+                          ),
+                        ),
+                      );
                     },
                     child: const Text(
                       "Continue",
@@ -97,14 +139,13 @@ class CardPaymentDetailsForm extends StatelessWidget {
       child: TextField(
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: const TextStyle(
-            fontSize: 12,
-            color: Colors.grey,
-          ),
+          hintStyle: const TextStyle(fontSize: 12, color: Colors.grey),
           filled: true,
           fillColor: Colors.white,
-          contentPadding:
-          const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 14,
+            vertical: 10,
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide.none,

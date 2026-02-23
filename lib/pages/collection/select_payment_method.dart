@@ -5,7 +5,24 @@ import 'package:laundry_pos_system_app/pages/collection/select_payment_method_up
 import 'card_payment_details.dart';
 
 class SelectPaymentMethod extends StatefulWidget {
-  const SelectPaymentMethod({super.key});
+  final int realId;
+  final String displayId;
+  final String type;
+  final String date;
+  final String time;
+  final String address;
+  final String PhoneNumber;
+
+  const SelectPaymentMethod({
+    super.key,
+    required this.realId,
+    required this.displayId,
+    required this.type,
+    required this.date,
+    required this.time,
+    required this.address,
+    required this.PhoneNumber
+  });
 
   @override
   State<SelectPaymentMethod> createState() => _SelectPaymentMethodState();
@@ -22,7 +39,14 @@ class _SelectPaymentMethodState extends State<SelectPaymentMethod> {
       body: SafeArea(
         child: Column(
           children: [
-            SelectPaymentMethodUpperPartUtil(),
+            SelectPaymentMethodUpperPartUtil(
+              realId: widget.realId,
+              displayId: widget.displayId,
+              type: widget.type,
+              date: widget.date,
+              time: widget.time,
+              address: widget.address,
+                PhoneNumber: widget.PhoneNumber),
             
             // 💳 Payment Method Section
             Padding(
@@ -69,7 +93,15 @@ class _SelectPaymentMethodState extends State<SelectPaymentMethod> {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>CardPaymentDetailsForm()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>CardPaymentDetailsForm(
+                      realId: widget.realId,
+                      displayId: widget.displayId,
+                      type: widget.type,
+                      date: widget.date,
+                      time: widget.time,
+                      address: widget.address,
+                        PhoneNumber : widget.PhoneNumber
+                    )));
                   },
                   child: const Text(
                     "Continue",

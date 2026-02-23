@@ -2,28 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:laundry_pos_system_app/pages/home_dashboard.dart';
 import '../../util/header.dart';
 
+class PaymentCollectedScreen extends StatefulWidget {
+  final int realId;
+  final String displayId;
+  final String type;
+  final String date;
+  final String time;
+  final String address;
+  final String PhoneNumber;
 
+  const PaymentCollectedScreen({
+    super.key,
+    required this.PhoneNumber,
+    required this.displayId,
+    required this.date,
+    required this.time,
+    required this.address,
+    required this.realId,
+    required this.type,
+  });
 
-class PaymentCollectedScreen extends StatelessWidget {
-  const PaymentCollectedScreen({super.key});
+  @override
+  State<PaymentCollectedScreen> createState() => _PaymentCollectedScreenState();
+}
 
+class _PaymentCollectedScreenState extends State<PaymentCollectedScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-
           /// 🌊 BACKGROUND IMAGE
           Positioned.fill(
-            child: Image.asset(
-              "assets/images/image 88.png",
-              fit: BoxFit.cover,
-            ),
+            child: Image.asset("assets/images/image 88.png", fit: BoxFit.cover),
           ),
 
           Column(
             children: [
-
               /// 🔵 HEADER
               headerUi(title: "Payment Collected"),
 
@@ -33,7 +48,6 @@ class PaymentCollectedScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-
                       /// 🎉 SUCCESS GIF
                       Image.asset(
                         "assets/images/balanced_collected_sucessfully.gif", // your gif path
@@ -65,14 +79,12 @@ class PaymentCollectedScreen extends StatelessWidget {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-
                             /// LEFT DETAILS
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  Text(
-                                    "#TMS/COL-01",
+                                children:  [
+                                  Text(widget.displayId,
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 13,
@@ -82,13 +94,16 @@ class PaymentCollectedScreen extends StatelessWidget {
 
                                   Row(
                                     children: [
-                                      Icon(Icons.person,
-                                          size: 14,
-                                          color: Colors.grey),
+                                      Icon(
+                                        Icons.person,
+                                        size: 14,
+                                        color: Colors.grey,
+                                      ),
                                       SizedBox(width: 6),
-                                      Text("John Doe",
-                                          style:
-                                          TextStyle(fontSize: 12)),
+                                      Text(
+                                        "John Doe",
+                                        style: TextStyle(fontSize: 12),
+                                      ),
                                     ],
                                   ),
 
@@ -96,15 +111,18 @@ class PaymentCollectedScreen extends StatelessWidget {
 
                                   Row(
                                     children: [
-                                      Icon(Icons.phone,
-                                          size: 14,
-                                          color: Colors.grey),
+                                      Icon(
+                                        Icons.phone,
+                                        size: 14,
+                                        color: Colors.grey,
+                                      ),
                                       SizedBox(width: 6),
-                                      Text("9876543201",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color:
-                                              Colors.grey)),
+                                      Text(widget.PhoneNumber,
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
                                     ],
                                   ),
 
@@ -112,15 +130,18 @@ class PaymentCollectedScreen extends StatelessWidget {
 
                                   Row(
                                     children: [
-                                      Icon(Icons.payment,
-                                          size: 14,
-                                          color: Colors.grey),
+                                      Icon(
+                                        Icons.payment,
+                                        size: 14,
+                                        color: Colors.grey,
+                                      ),
                                       SizedBox(width: 6),
-                                      Text("Payment",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color:
-                                              Colors.grey)),
+                                      Text(widget.type,
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ],
@@ -129,8 +150,7 @@ class PaymentCollectedScreen extends StatelessWidget {
 
                             /// RIGHT AMOUNT SECTION
                             Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Image.asset(
                                   "assets/images/payment_collection.png",
@@ -152,8 +172,7 @@ class PaymentCollectedScreen extends StatelessWidget {
                                   "AED 850.00",
                                   style: TextStyle(
                                     fontSize: 12,
-                                    fontWeight:
-                                    FontWeight.bold,
+                                    fontWeight: FontWeight.bold,
                                     color: Color(0xFFB0668D),
                                   ),
                                 ),
@@ -172,25 +191,27 @@ class PaymentCollectedScreen extends StatelessWidget {
                 top: false,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 20, vertical: 16),
+                    horizontal: 20,
+                    vertical: 16,
+                  ),
                   child: SizedBox(
                     width: double.infinity,
                     height: 48,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                        const Color(0xFF5A4FCF),
+                        backgroundColor: const Color(0xFF5A4FCF),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius:
-                          BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(8),
                         ),
                       ),
                       onPressed: () {
                         Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(builder: (context) => HomeDashboardScreen()),
-                              (route) => false,
+                          MaterialPageRoute(
+                            builder: (context) => HomeDashboardScreen(),
+                          ),
+                          (route) => false,
                         );
                       },
                       child: const Text(
@@ -198,7 +219,7 @@ class PaymentCollectedScreen extends StatelessWidget {
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 14,
-                          color: Colors.white
+                          color: Colors.white,
                         ),
                       ),
                     ),

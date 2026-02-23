@@ -3,10 +3,28 @@ import 'package:laundry_pos_system_app/pages/collection/payment_collected_sucess
 import '../../util/header.dart';
 
 class CollectionPaymentScreen extends StatefulWidget {
-  const CollectionPaymentScreen({super.key});
+  final int realId;
+  final String displayId;
+  final String type;
+  final String date;
+  final String time;
+  final String address;
+  final String PhoneNumber;
+
+  const CollectionPaymentScreen({
+    super.key,
+    required this.PhoneNumber,
+    required this.type,
+    required this.realId,
+    required this.address,
+    required this.time,
+    required this.date,
+    required this.displayId,
+  });
 
   @override
-  State<CollectionPaymentScreen> createState() => _CollectionPaymentScreenState();
+  State<CollectionPaymentScreen> createState() =>
+      _CollectionPaymentScreenState();
 }
 
 class _CollectionPaymentScreenState extends State<CollectionPaymentScreen> {
@@ -25,7 +43,6 @@ class _CollectionPaymentScreenState extends State<CollectionPaymentScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
-
                     const SizedBox(height: 18),
 
                     /// 📦 COLLECTION INFO CARD
@@ -38,14 +55,13 @@ class _CollectionPaymentScreenState extends State<CollectionPaymentScreen> {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-
                           /// LEFT SIDE DETAILS
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children:  [
                                 Text(
-                                  "#TMS/COL-01",
+                                  widget.displayId,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 13,
@@ -55,11 +71,16 @@ class _CollectionPaymentScreenState extends State<CollectionPaymentScreen> {
 
                                 Row(
                                   children: [
-                                    Icon(Icons.person,
-                                        size: 14, color: Colors.grey),
+                                    Icon(
+                                      Icons.person,
+                                      size: 14,
+                                      color: Colors.grey,
+                                    ),
                                     SizedBox(width: 6),
-                                    Text("John Doe",
-                                        style: TextStyle(fontSize: 12)),
+                                    Text(
+                                      "John Doe",
+                                      style: TextStyle(fontSize: 12),
+                                    ),
                                   ],
                                 ),
 
@@ -67,13 +88,18 @@ class _CollectionPaymentScreenState extends State<CollectionPaymentScreen> {
 
                                 Row(
                                   children: [
-                                    Icon(Icons.phone,
-                                        size: 14, color: Colors.grey),
+                                    Icon(
+                                      Icons.phone,
+                                      size: 14,
+                                      color: Colors.grey,
+                                    ),
                                     SizedBox(width: 6),
-                                    Text("9876543201",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.grey)),
+                                    Text(widget.PhoneNumber,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
                                   ],
                                 ),
 
@@ -81,13 +107,18 @@ class _CollectionPaymentScreenState extends State<CollectionPaymentScreen> {
 
                                 Row(
                                   children: [
-                                    Icon(Icons.payment,
-                                        size: 14, color: Colors.grey),
+                                    Icon(
+                                      Icons.payment,
+                                      size: 14,
+                                      color: Colors.grey,
+                                    ),
                                     SizedBox(width: 6),
-                                    Text("Payment",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.grey)),
+                                    Text(widget.type,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ],
@@ -144,13 +175,13 @@ class _CollectionPaymentScreenState extends State<CollectionPaymentScreen> {
                     /// 🧾 QR CARD
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 18),
+                        vertical: 20,
+                        horizontal: 18,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: const Color(0xFFBFD6F3),
-                        ),
+                        border: Border.all(color: const Color(0xFFBFD6F3)),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.08),
@@ -199,8 +230,7 @@ class _CollectionPaymentScreenState extends State<CollectionPaymentScreen> {
           SafeArea(
             top: false,
             child: Padding(
-              padding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -213,14 +243,24 @@ class _CollectionPaymentScreenState extends State<CollectionPaymentScreen> {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentCollectedScreen()));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PaymentCollectedScreen(
+                          realId: widget.realId,
+                          displayId: widget.displayId,
+                          type: widget.type,
+                          date: widget.date,
+                          time: widget.time,
+                          address: widget.address,
+                          PhoneNumber: widget.PhoneNumber
+                        ),
+                      ),
+                    );
                   },
                   child: const Text(
                     "Continue",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
                   ),
                 ),
               ),

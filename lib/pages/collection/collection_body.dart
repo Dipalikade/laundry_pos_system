@@ -84,6 +84,7 @@ class TodaysCollectionsScreen extends ConsumerWidget {
                             final item = collections[index];
 
                             return CollectionCard(
+                              PhoneNumber: item.phoneNumber,
                               realId: item.id,                    // numeric id
                               displayId: item.collectionCode,     // TMS/COL-011
                               type: item.collectionType,
@@ -118,6 +119,7 @@ class CollectionCard extends ConsumerStatefulWidget {
   final String date;
   final String time;
   final String address;
+  final String PhoneNumber;
 
   const CollectionCard({
     super.key,
@@ -127,6 +129,7 @@ class CollectionCard extends ConsumerStatefulWidget {
     required this.date,
     required this.time,
     required this.address,
+    required this.PhoneNumber
   });
 
   @override
@@ -140,7 +143,22 @@ class _CollectionCardState extends ConsumerState<CollectionCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: ()=>Navigator.push(context,MaterialPageRoute(builder: (context)=>SelectPaymentMethod())),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SelectPaymentMethod(
+              realId: widget.realId,
+              displayId: widget.displayId,
+              type: widget.type,
+              date: widget.date,
+              time: widget.time,
+              address: widget.address,
+              PhoneNumber : widget.PhoneNumber,
+            ),
+          ),
+        );
+      },
       child: Container(
         margin: const EdgeInsets.only(bottom: 14),
         padding: const EdgeInsets.all(14),
