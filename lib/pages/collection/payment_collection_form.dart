@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../providers/customer_provider.dart';
 import '../../providers/driver_provider.dart';
 import '../../providers/create_collection_provider.dart'; // ✅ ADDED
@@ -360,11 +359,15 @@ class _PaymentCollectionFormState
     return Padding(
       padding:
       const EdgeInsets.only(bottom: 6, top: 12),
-      child: Text(
-        "$text *",
-        style: const TextStyle(
-            fontWeight: FontWeight.w600),
-      ),
+      child: Row(children: [
+        Text(text,
+          style: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w600),
+        ),
+        SizedBox(width: 5,),
+        Text("*",style: TextStyle(color: Colors.red),)
+      ],),
     );
   }
 

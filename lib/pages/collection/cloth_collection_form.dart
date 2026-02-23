@@ -369,11 +369,15 @@ class _ClothCollectionFormState
     return Padding(
       padding:
       const EdgeInsets.only(bottom: 6, top: 12),
-      child: Text(
-        "$text *",
-        style: const TextStyle(
-            fontWeight: FontWeight.w600),
-      ),
+      child: Row(children: [
+        Text(text,
+          style: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w600),
+        ),
+        SizedBox(width: 5,),
+        Text("*",style: TextStyle(color: Colors.red),)
+      ],),
     );
   }
 
