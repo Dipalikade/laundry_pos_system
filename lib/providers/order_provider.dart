@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dio/dio.dart';
 import '../model/order_model.dart';
 import '../services/dio_client.dart';
 import '../services/order_service.dart';

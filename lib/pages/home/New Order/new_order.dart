@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:laundry_pos_system_app/services/apibaseurl.dart';
 import 'package:laundry_pos_system_app/util/header.dart';
 import '../../../model/customer_model.dart';
 import '../../../services/customer_service.dart';
@@ -28,7 +29,7 @@ class _CustomerListBodyState extends State<CustomerListBody> {
     customerService = CustomerService(
       Dio(
         BaseOptions(
-          baseUrl: "https://slfuatbackend.1on1screen.com/api/",
+          baseUrl: ApiConfig.baseUrl,
           headers: {"Accept": "application/json"},
         ),
       ),
@@ -254,8 +255,7 @@ class CustomerCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
 
-
-                  if (customer.address != null && customer.address.isNotEmpty)
+                  if (customer.address.isNotEmpty)
                     Row(
                       children: [
                         const Icon(

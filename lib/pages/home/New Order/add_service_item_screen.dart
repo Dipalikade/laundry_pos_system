@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:laundry_pos_system_app/model/service_model.dart';
+import 'package:laundry_pos_system_app/pages/home/New%20Order/order_placed_summery_screen.dart';
 import 'package:laundry_pos_system_app/providers/category_provider.dart';
 import 'package:laundry_pos_system_app/services/service_api.dart';
 import 'package:laundry_pos_system_app/util/header.dart';
@@ -160,7 +161,7 @@ class _AddServiceItemScreenState extends ConsumerState<AddServiceItemScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AddToMyCartScreen(
+                          builder: (context) =>OrderSummaryScreen(
                             customer: widget.customer,
                             cartItems: cartItems,
                           ),

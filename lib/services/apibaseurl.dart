@@ -4,3 +4,13 @@ class ApiConfig {
 
   static const String login = "auth/login";
 }
+
+
+//userd this base url 
+
+// Dio(
+//         BaseOptions(
+//           baseUrl: ApiConfig.baseUrl,
+//           headers: {"Accept": "application/json"},
+//         ),
+//       ),
