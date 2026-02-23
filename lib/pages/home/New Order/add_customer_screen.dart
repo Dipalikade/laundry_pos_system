@@ -252,29 +252,86 @@ class _AddNewCustomerScreenState
 
                       const SizedBox(height: 18),
 
-                      _label("Apartment Number"),
+                      _label("Apartment Number",required: true),
                       const SizedBox(height: 6),
                       _textField("Apartment Number",
-                          controller: apartmentController),
+                          controller: apartmentController,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return "Apartment number is required";
+                          }
+
+                          if (value.trim().length < 2) {
+                            return "Apartment number must be at least 2 characters";
+                          }
+
+                          return null;
+                        },),
 
                       const SizedBox(height: 16),
 
-                      _label("Building Name"),
+                      _label("Building Name",required: true),
                       const SizedBox(height: 6),
                       _textField("Building Name",
-                          controller: buildingController),
+                          controller: buildingController,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return "Building name is required";
+                          }
+
+                          if (value.trim().length < 3) {
+                            return "Building name must be at least 3 characters";
+                          }
+
+                          if (!RegExp(r'^[a-zA-Z0-9\s.-]+$').hasMatch(value)) {
+                            return "Invalid building name";
+                          }
+
+                          return null;
+                        },),
 
                       const SizedBox(height: 16),
 
-                      _label("Address"),
+                      _label("Address",required: true),
                       const SizedBox(height: 6),
-                      _textField("Address", controller: addressController),
+                      _textField("Address", controller: addressController,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return "Address is required";
+                          }
+
+                          if (value.trim().length < 5) {
+                            return "Please enter a valid address";
+                          }
+
+                          if (!RegExp(r'^[a-zA-Z0-9\s,./-]+$').hasMatch(value)) {
+                            return "Invalid characters in address";
+                          }
+
+                          return null;
+                        },),
 
                       const SizedBox(height: 16),
 
-                      _label("Location"),
+                      _label("Location",required: true),
                       const SizedBox(height: 6),
-                      _textField("Location", controller: locationController),
+                      _textField("Location", controller: locationController,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return "Location is required";
+                          }
+
+                          if (value.trim().length < 3) {
+                            return "Enter a valid location";
+                          }
+
+                          if (!RegExp(r'^[a-zA-Z\s.-]+$').hasMatch(value)) {
+                            return "Location should contain only letters";
+                          }
+
+                          return null;
+                        },
+                      ),
 
                       const SizedBox(height: 16),
 

@@ -12,7 +12,7 @@ class InvoiceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isDelivered = order.status.toLowerCase() == "delivered";
+    bool isDelivered = order.orderStatus.toLowerCase() == "delivered";
 
     return Scaffold(
       backgroundColor: const Color(0xffF2F3F7),
@@ -75,14 +75,14 @@ class InvoiceScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Order Id: ${order.orderId}",
+                          "Order Id: ${order.id}",
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          order.date,
+                          order.orderDate,
                           style: const TextStyle(
                             fontSize: 12,
                             color: Colors.black54,
@@ -135,16 +135,16 @@ class InvoiceScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 4),
-                        Text(order.phone,
-                            style: const TextStyle(color: Colors.grey)),
+                        // Text(order.phone,
+                        //     style: const TextStyle(color: Colors.grey)),
                         const SizedBox(height: 4),
-                        Text(order.address,
-                            style: const TextStyle(color: Colors.grey)),
+                        // Text(order.address,
+                        //     style: const TextStyle(color: Colors.grey)),
                       ],
                     ),
                   ),
                   Text(
-                    order.status,
+                    order.orderStatus,
                     style: TextStyle(
                       color: isDelivered ? Colors.green : Colors.orange,
                       fontWeight: FontWeight.w600,
@@ -177,19 +177,19 @@ class InvoiceScreen extends StatelessWidget {
                   color: const Color(0xffEDE9F7),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Column(
-                  children: [
-                    _row("Subtotal",
-                        "AED ${order.subtotal.toStringAsFixed(2)}"),
-                    _row("Discount (1%)",
-                        "- AED ${order.discount.toStringAsFixed(2)}"),
-                    _row(
-                      "Total",
-                      "AED ${order.total.toStringAsFixed(2)}",
-                      bold: true,
-                    ),
-                  ],
-                ),
+                // child: Column(
+                //   children: [
+                //     _row("Subtotal",
+                //         "AED ${order.subtotal.toStringAsFixed(2)}"),
+                //     _row("Discount (1%)",
+                //         "- AED ${order.discount.toStringAsFixed(2)}"),
+                //     _row(
+                //       "Total",
+                //       "AED ${order.total.toStringAsFixed(2)}",
+                //       bold: true,
+                //     ),
+                //   ],
+                // ),
               ),
 
               const SizedBox(height: 60),

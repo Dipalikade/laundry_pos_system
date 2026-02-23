@@ -8,7 +8,7 @@ class OrderDetailsScreen extends StatelessWidget {
 
   const OrderDetailsScreen({super.key, required this.order});
 
-  bool get isPending => order.status.toLowerCase() == "pending";
+  bool get isPending => order.orderStatus.toLowerCase() == "pending";
 
   // ================= CONFIRM DIALOG =================
 
@@ -86,7 +86,7 @@ class OrderDetailsScreen extends StatelessWidget {
   // ================= STATUS BOTTOM SHEET =================
 
   void _showStatusBottomSheet(BuildContext context) {
-    String selectedStatus = order.status;
+    String selectedStatus = order.orderStatus;
 
     showModalBottomSheet(
       context: context,
@@ -322,12 +322,12 @@ class OrderDetailsScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 3),
-                  Text(order.phone, style: const TextStyle(color: Colors.grey)),
+                  // Text(order.phone, style: const TextStyle(color: Colors.grey)),
                   const SizedBox(height: 3),
-                  Text(
-                    order.address,
-                    style: const TextStyle(color: Colors.grey),
-                  ),
+                  // Text(
+                  //   order.address,
+                  //   style: const TextStyle(color: Colors.grey),
+                  // ),
                 ],
               ),
             ),
@@ -337,7 +337,7 @@ class OrderDetailsScreen extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      order.status,
+                      order.orderStatus,
                       style: TextStyle(
                         color: isPending ? Colors.orange : Colors.green,
                         fontWeight: FontWeight.w600,
@@ -368,14 +368,14 @@ class OrderDetailsScreen extends StatelessWidget {
                   text: "Order Id: ",
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
-                TextSpan(
-                  text: order.orderId,
-                  style: const TextStyle(color: Color(0xff3F6EDC)),
-                ),
+                // TextSpan(
+                //   text: order.id,
+                //   style: const TextStyle(color: Color(0xff3F6EDC)),
+                // ),
               ],
             ),
           ),
-          Text(order.date, style: const TextStyle(color: Colors.grey)),
+          Text(order.orderDate, style: const TextStyle(color: Colors.grey)),
         ],
       ),
     );
@@ -389,16 +389,16 @@ class OrderDetailsScreen extends StatelessWidget {
         color: const Color(0xffEDE7F6),
         borderRadius: BorderRadius.circular(14),
       ),
-      child: Column(
-        children: [
-          _SummaryRow("SubTotal", "AED ${order.subtotal.toStringAsFixed(2)}"),
-          _SummaryRow(
-            "Discount(1%)",
-            "AED ${order.discount.toStringAsFixed(2)}",
-          ),
-          _SummaryRow("Total", "AED ${order.total.toStringAsFixed(2)}"),
-        ],
-      ),
+      // child: Column(
+      //   children: [
+      //     _SummaryRow("SubTotal", "AED ${order.subtotal.toStringAsFixed(2)}"),
+      //     _SummaryRow(
+      //       "Discount(1%)",
+      //       "AED ${order.discount.toStringAsFixed(2)}",
+      //     ),
+      //     _SummaryRow("Total", "AED ${order.total.toStringAsFixed(2)}"),
+      //   ],
+      // ),
     );
   }
 
