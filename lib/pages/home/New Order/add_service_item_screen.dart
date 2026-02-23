@@ -661,6 +661,26 @@ class _ServiceTypeBottomSheet extends StatefulWidget {
 class _ServiceTypeBottomSheetState extends State<_ServiceTypeBottomSheet> {
   ServiceType? _selectedService;
 
+  String selectedDelivery = "Normal";
+  double normalPrice = 22;
+  double expressPrice = 33;
+  double urgentPrice = 44;
+
+  int quantity = 1;
+
+  double getTotalPrice() {
+    if (_selectedService == null) return 0;
+
+    double base = double.parse(_selectedService!.price);
+    double delivery = 0;
+
+    if (selectedDelivery == "Normal") delivery = normalPrice;
+    if (selectedDelivery == "Express") delivery = expressPrice;
+    if (selectedDelivery == "Urgent") delivery = urgentPrice;
+
+    return (base + delivery) * quantity;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -739,7 +759,45 @@ class _ServiceTypeBottomSheetState extends State<_ServiceTypeBottomSheet> {
             );
           }),
 
+          const SizedBox(height: 10),
+
+          _deliveryTile("Normal", normalPrice, "Delivery In 24-48 Hrs"),
+          _deliveryTile("Express", expressPrice, "Delivery In 12 Hrs"),
+          _deliveryTile("Urgent", urgentPrice, "Delivery In 2-4 Hrs"),
+
           const SizedBox(height: 20),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "Quantity:",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      if (quantity > 1) {
+                        setState(() => quantity--);
+                      }
+                    },
+                    icon: const Icon(Icons.remove),
+                  ),
+                  Text(
+                    quantity.toString(),
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      setState(() => quantity++);
+                    },
+                    icon: const Icon(Icons.add),
+                  ),
+                ],
+              ),
+            ],
+          ),
 
           // Buttons
           Row(
@@ -759,15 +817,14 @@ class _ServiceTypeBottomSheetState extends State<_ServiceTypeBottomSheet> {
                   onPressed: _selectedService == null
                       ? null
                       : () {
-                          widget.onAdd(
-                            _selectedService!.type,
-                            double.parse(_selectedService!.price),
-                          );
+                         
+
+                          widget.onAdd(_selectedService!.type, getTotalPrice());
                           Navigator.pop(context);
                         },
-                  child: const Text(
-                    "Add",
-                    style: TextStyle(color: Colors.white),
+                  child: Text(
+                    "Add to Cart - AED ${getTotalPrice().toStringAsFixed(2)}",
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
               ),
@@ -775,6 +832,99 @@ class _ServiceTypeBottomSheetState extends State<_ServiceTypeBottomSheet> {
           ),
         ],
       ),
+    );
+  }
+
+
+  Widget _deliveryTile(String type, double price, String subtitle) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: selectedDelivery == type
+              ? const Color(0xFF4B4BD6)
+              : Colors.grey.shade300,
+        ),
+      ),
+      child: Row(
+        children: [
+          Radio<String>(
+            value: type,
+            groupValue: selectedDelivery,
+            onChanged: (val) {
+              setState(() {
+                selectedDelivery = val!;
+              });
+            },
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(type + " Delivery"),
+                Text(
+                  subtitle,
+                  style: const TextStyle(fontSize: 11, color: Colors.red),
+                ),
+              ],
+            ),
+          ),
+          Row(
+            children: [
+              Text(price.toString()),
+              IconButton(
+                icon: const Icon(Icons.edit, size: 18),
+                onPressed: () {
+                  _editPrice(type);
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _editPrice(String type) {
+    TextEditingController controller = TextEditingController();
+
+    if (type == "Normal") controller.text = normalPrice.toString();
+    if (type == "Express") controller.text = expressPrice.toString();
+    if (type == "Urgent") controller.text = urgentPrice.toString();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Edit $type Price"),
+          content: TextField(
+            controller: controller,
+            keyboardType: TextInputType.number,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  double value = double.tryParse(controller.text) ?? 0;
+
+                  if (type == "Normal") normalPrice = value;
+                  if (type == "Express") expressPrice = value;
+                  if (type == "Urgent") urgentPrice = value;
+                });
+
+                Navigator.pop(context);
+              },
+              child: const Text("Save"),
+            ),
+          ],
+        );
+      },
     );
   }
 }

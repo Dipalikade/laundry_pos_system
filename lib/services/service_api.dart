@@ -1,16 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:laundry_pos_system_app/model/category_model.dart';
 import 'package:laundry_pos_system_app/model/service_model.dart';
+import 'package:laundry_pos_system_app/services/apibaseurl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ServiceApi {
-  final Dio _dio;
-  static const String baseUrl = 'https://slfuatbackend.1on1screen.com';
-
+   final Dio _dio;
   ServiceApi()
     : _dio = Dio(
         BaseOptions(
-          baseUrl: baseUrl,
+          baseUrl: ApiConfig.baseUrl,
           connectTimeout: const Duration(seconds: 30),
           receiveTimeout: const Duration(seconds: 30),
           headers: {
@@ -64,10 +63,10 @@ class ServiceApi {
         queryParams['category'] = category;
       }
 
-      print('Calling API: /api/service_list/list with params: $queryParams');
+      print('Calling API: /service_list/list with params: $queryParams');
 
       final response = await _dio.get(
-        '/api/service_list/list',
+        '/service_list/list',
         queryParameters: queryParams,
       );
 
@@ -95,9 +94,9 @@ class ServiceApi {
   // Get service categories
   Future<CategoryListResponse> getServiceCategories() async {
     try {
-      print('Calling API: /api/service/service_categories/list');
+      print('Calling API: /service/service_categories/list');
 
-      final response = await _dio.get('/api/service/service_categories/list');
+      final response = await _dio.get('/service/service_categories/list');
 
       if (response.statusCode == 200) {
         print('Categories loaded: ${response.data['data']?.length} items');
@@ -133,29 +132,31 @@ class ServiceApi {
 
     // Remove any duplicate 'uploads' in the path
     String cleanPath = path.replaceFirst('uploads/', '');
-    return '$baseUrl/uploads/$cleanPath';
+    return '$ApiConfig.baseUrl/uploads/$cleanPath';
   }
 
   // Get service icon URL
   // Get service icon URL with multiple fallback paths
-  String getServiceIconUrl(String iconName) {
-    if (iconName.isEmpty) return '';
+ String getServiceIconUrl(String iconName) {
+  if (iconName.isEmpty) return '';
 
-    // List of possible paths to try (in order of likelihood)
-    final possiblePaths = [
-      '/uploads/', // Current path that's failing
-      '/images/',
-      '/assets/',
-      '/storage/',
-      '/public/uploads/',
-      '/upload/',
-      '/media/',
-    ];
-
-    // Clean the filename
-    String cleanIcon = iconName.replaceAll('uploads/', '');
-
-    // Return the first path for now - we'll let the Image widget handle fallbacks
-    return '$baseUrl/uploads/$cleanIcon';
+  // If API already returns full URL
+  if (iconName.startsWith('http')) {
+    return iconName;
   }
+
+  // Remove /api if exists
+  String base = ApiConfig.baseUrl.replaceAll('/api', '');
+
+  // Remove trailing slash
+  if (base.endsWith('/')) {
+    base = base.substring(0, base.length - 1);
+  }
+
+  // Remove leading slash from filename
+  iconName = iconName.replaceFirst(RegExp(r'^/+'), '');
+
+  // Final correct path
+  return '$base/uploads/servicesTypes/$iconName';
+}
 }
