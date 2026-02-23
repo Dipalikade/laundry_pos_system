@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../providers/collection_provider.dart';
 import '../../providers/customer_provider.dart';
 import '../../providers/driver_provider.dart';
 import '../../providers/create_collection_provider.dart'; // ✅ ADDED
@@ -297,7 +298,7 @@ class _PaymentCollectionFormState
                     }
 
                     final body = {
-                      "collection_type": "CLOTH",
+                      "collection_type": "PAYMENT",
                       "customer_type": customerType,
                       "customer_id":
                       int.parse(selectedCustomerId!),
@@ -322,6 +323,8 @@ class _PaymentCollectionFormState
                               .future);
 
                       if (response["success"] == true) {
+                        ref.invalidate(collectionsProvider);
+
                         ScaffoldMessenger.of(context)
                             .showSnackBar(
                           SnackBar(

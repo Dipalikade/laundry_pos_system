@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../providers/collection_provider.dart';
 import '../../providers/customer_provider.dart';
 import '../../providers/driver_provider.dart';
 import '../../providers/create_collection_provider.dart'; // ✅ ADDED
@@ -332,12 +333,12 @@ class _ClothCollectionFormState
                               .future);
 
                       if (response["success"] == true) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(
-                          SnackBar(
-                            content:
-                            Text(response["message"]),
-                          ),
+
+                        // ✅ REFRESH COLLECTION LIST
+                        ref.invalidate(collectionsProvider);
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(response["message"])),
                         );
 
                         Navigator.pop(context);

@@ -8,6 +8,7 @@ import 'add_collection.dart';
 enum CollectionStatus {
   collected,
   cancelled,
+  edit,
 }
 
 class TodaysCollectionsScreen extends ConsumerWidget {
@@ -193,6 +194,10 @@ class _CollectionCardState extends ConsumerState<CollectionCard> {
                           }
                         }
 
+                        if(value == CollectionStatus.edit){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>AddCollectionScreen()));
+                        }
+
                         setState(() {
                           _status = value!;
                         });
@@ -205,6 +210,10 @@ class _CollectionCardState extends ConsumerState<CollectionCard> {
                         DropdownMenuItem(
                           value: CollectionStatus.cancelled,
                           child: Text("Cancelled"),
+                        ),
+                        DropdownMenuItem(
+                          value: CollectionStatus.edit,
+                          child: Text("Edit"),
                         ),
                       ],
                     ),
