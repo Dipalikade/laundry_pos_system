@@ -83,7 +83,8 @@ class TodaysCollectionsScreen extends ConsumerWidget {
                             final item = collections[index];
 
                             return CollectionCard(
-                              id: item.collectionCode,
+                              realId: item.id,                    // numeric id
+                              displayId: item.collectionCode,     // TMS/COL-011
                               type: item.collectionType,
                               date:
                               "${item.pickupDate.day}/${item.pickupDate.month}/${item.pickupDate.year}",
@@ -109,8 +110,9 @@ class TodaysCollectionsScreen extends ConsumerWidget {
   }
 }
 
-class CollectionCard extends StatefulWidget {
-  final String id;
+class CollectionCard extends ConsumerStatefulWidget {
+  final int realId;          // for delete API
+  final String displayId;    // for UI
   final String type;
   final String date;
   final String time;
@@ -118,7 +120,8 @@ class CollectionCard extends StatefulWidget {
 
   const CollectionCard({
     super.key,
-    required this.id,
+    required this.realId,
+    required this.displayId,
     required this.type,
     required this.date,
     required this.time,
@@ -126,10 +129,10 @@ class CollectionCard extends StatefulWidget {
   });
 
   @override
-  State<CollectionCard> createState() => _CollectionCardState();
+  ConsumerState<CollectionCard> createState() => _CollectionCardState();
 }
 
-class _CollectionCardState extends State<CollectionCard> {
+class _CollectionCardState extends ConsumerState<CollectionCard> {
   /// Default dropdown value
   CollectionStatus _status = CollectionStatus.collected;
 
@@ -152,7 +155,7 @@ class _CollectionCardState extends State<CollectionCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  widget.id,
+                  widget.displayId,
                   style: const TextStyle(fontWeight: FontWeight.w600),
                 ),
 
@@ -172,7 +175,24 @@ class _CollectionCardState extends State<CollectionCard> {
                         fontSize: 12,
                         color: Colors.black,
                       ),
-                      onChanged: (value) {
+                      onChanged: (value) async {
+                        if (value == CollectionStatus.cancelled) {
+                          try {
+                            await ref
+                                .read(collectionControllerProvider)
+                                .deleteCollection(widget.realId);
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("Collection Cancelled")),
+                            );
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(e.toString())),
+                            );
+                            return; // stop if error
+                          }
+                        }
+
                         setState(() {
                           _status = value!;
                         });

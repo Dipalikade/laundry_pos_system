@@ -3,6 +3,9 @@ import 'package:dio/dio.dart';
 import '../model/collection_model.dart';
 import '../services/dio_client.dart';
 
+/// =============================
+/// FETCH COLLECTION LIST
+/// =============================
 final collectionsProvider =
 FutureProvider<List<CollectionModel>>((ref) async {
   final dio = ref.read(dioProvider);
@@ -25,3 +28,30 @@ FutureProvider<List<CollectionModel>>((ref) async {
     throw Exception(e.message);
   }
 });
+
+
+/// =============================
+/// DELETE CONTROLLER
+/// =============================
+final collectionControllerProvider =
+Provider((ref) => CollectionController(ref));
+
+class CollectionController {
+  final Ref ref;
+
+  CollectionController(this.ref);
+
+  Future<void> deleteCollection(int id) async {
+    final dio = ref.read(dioProvider);
+
+    final response =
+    await dio.delete("collections/delete/$id");
+
+    if (response.data["success"] == true) {
+      // Refresh the list after delete
+      ref.invalidate(collectionsProvider);
+    } else {
+      throw Exception(response.data["message"]);
+    }
+  }
+}
