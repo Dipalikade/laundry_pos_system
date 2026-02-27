@@ -8,7 +8,7 @@ import 'package:laundry_pos_system_app/util/header.dart';
 import '../../../model/card_item_model.dart';
 import '../../../model/customer_model.dart';
 import '../../../providers/service_provider.dart';
-import 'add_to_my_cart_screen.dart';
+
 
 class AddServiceItemScreen extends ConsumerStatefulWidget {
   final Customer customer;
@@ -483,7 +483,7 @@ class _AddServiceItemScreenState extends ConsumerState<AddServiceItemScreen> {
 /// SERVICE CARD
 class ServiceItemCard extends StatelessWidget {
   final String title;
-  final String imageUrl;
+  final String imageUrl; // Still received but ignored
   final List<ServiceType> serviceTypes;
   final Function(String serviceType, double price) onAdd;
 
@@ -530,7 +530,7 @@ class ServiceItemCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => _showServiceOptions(context),
       child: Container(
-        decoration: BoxDecoration(
+       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
@@ -547,68 +547,47 @@ class ServiceItemCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
-              child: imageUrl.isNotEmpty
-                  ? Image.network(
-                      imageUrl,
-                      fit: BoxFit.contain,
-                      errorBuilder: (context, error, stackTrace) {
-                        print('Image error for $title: $error');
-                        print('Failed URL: $imageUrl');
-
-                        // Try alternative path by replacing 'uploads' with 'images'
-                        final alternativeUrl = imageUrl.replaceFirst(
-                          '/uploads/',
-                          '/images/',
-                        );
-
-                        return Image.network(
-                          alternativeUrl,
-                          fit: BoxFit.contain,
-                          errorBuilder: (context, error, stackTrace) {
-                            // If alternative also fails, show placeholder
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.image_not_supported,
-                                  size: 30,
-                                  color: Colors.grey.shade400,
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'No image',
-                                  style: TextStyle(
-                                    fontSize: 8,
-                                    color: Colors.grey.shade500,
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return Center(
-                          child: SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes!
-                                  : null,
-                            ),
-                          ),
-                        );
-                      },
-                    )
-                  : Icon(
-                      Icons.image_not_supported,
-                      size: 40,
-                      color: Colors.grey.shade400,
+              child: Image.network(
+                'https://slfuatbackend.1on1screen.com/uploads/servicesTypes/1769754366034-rewash.jpg',
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  // Fallback if image fails to load
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.image_not_supported,
+                        size: 30,
+                        color: Colors.grey.shade400,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'No image',
+                        style: TextStyle(
+                          fontSize: 8,
+                          color: Colors.grey.shade500,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
                     ),
+                  );
+                },
+              ),
             ),
             const SizedBox(height: 8),
             Text(
@@ -640,6 +619,7 @@ class ServiceItemCard extends StatelessWidget {
       ),
     );
   }
+
 }
 
 /// Service Type Bottom Sheet
